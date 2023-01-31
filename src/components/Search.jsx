@@ -6,11 +6,9 @@ function Search({ setFoundArticles }) {
     const [errorMsg, setErrorMsg] = useState("");
 
     const handleSearch = async (e) => {
-        const PORT = process.env.REACT_APP_SEARCH || "https://check4bias-server.onrender.com/search"
-
         if (searchTerm) {
             try {
-                const res = await axios.get(`${PORT}/${searchTerm}`)
+                const res = await axios.get(`${process.env.REACT_APP_SEARCH_RENDER}/${searchTerm}`)
                 setFoundArticles(res.data.data)
             } catch (err) {
                 console.log(err);
