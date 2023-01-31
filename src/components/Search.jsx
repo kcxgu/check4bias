@@ -6,9 +6,11 @@ function Search({ setFoundArticles }) {
     const [errorMsg, setErrorMsg] = useState("");
 
     const handleSearch = async (e) => {
+        const PORT = process.env.REACT_APP_SEARCH || "https://check4bias-server.onrender.com/search"
+
         if (searchTerm) {
             try {
-                const res = await axios.get(`http://localhost:3001/search/${searchTerm}`)
+                const res = await axios.get(`${PORT}/${searchTerm}`)
                 setFoundArticles(res.data.data)
             } catch (err) {
                 console.log(err);
@@ -26,7 +28,7 @@ function Search({ setFoundArticles }) {
                     className="w-full border border-lightGrey rounded-lg py-4 px-3 text-xl text-GreyGoose"
                     id="search"
                     type="text"
-                    placeholder="Enter a keyword to search and compare"
+                    placeholder="Search any topic to compare"
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyUp={(e) => (e.key === "Enter" ? handleSearch() : null)}
                     value={searchTerm}

@@ -22,8 +22,10 @@ function App() {
   const [serverError, setServerError] = useState(false);
 
   const getNews = async () => {
+    const PORT = process.env.REACT_APP_RSS || "https://check4bias-server.onrender.com/rss-parser"
+    
     try {
-      const res = await axios.get("http://localhost:3001/rss-parser");
+      const res = await axios.get(PORT);
       setBBCNews(res.data.BBCNews);
       setGuardianNews(res.data.theGuardian);
       setTheTelegraph(res.data.theTelegraph);
