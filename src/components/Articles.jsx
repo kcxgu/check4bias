@@ -1,0 +1,54 @@
+import { useEffect, useState } from "react";
+import Sentiment from "sentiment";
+
+const Articles = ({ source, title, link, date }) => {
+    const [sentimentScore, setSentimentScore] = useState(null);
+
+    let formatted = { day: "numeric", month: "long", year: "numeric" }
+    let articleDate = new Date(date).toLocaleDateString("en-GB", formatted)
+
+    const sentiment = new Sentiment();
+
+    useEffect(() => {
+        setSentimentScore(sentiment.analyze(title));
+    }, [title]);
+
+
+    return (
+        <>
+            <div className="border border-lightGrey rounded-lg py-5 px-4 bg-white shadow-lg">
+                {sentimentScore !== null ?
+                    <div className="group relative flex flex-col items-end">
+                        <span className="absolute max-w-xs md:max-w-sm lg:max-w-lg bg-GreyGoose text-white text-justify -top-40 -right-3 md:-top-36 md:-right-10 lg:-top-40 lg:-right-14 xl:-top-36 scale-0 rounded-lg py-3 px-4 group-hover:scale-100">Sentiment analysis is conducted based on a dictionary-like collection of words rated for goodness/badness on a scale of -5 (extremely negative) to 5 (extremely positive) via 0 (neutral) -
+                            <a href="http://www2.imm.dtu.dk/pubdb/pubs/6010-full.html" target="_blank" rel="noopener noreferrer" className="underline pl-1"
+                            >
+                                AFINN-en-165
+                            </a>
+                        </span>
+                        <p className="text-right py-1 my-0.5 cursor-help text-indigo font-medium tracking-wide">Sentiment Score: {sentimentScore.score}</p>
+                    </div>
+                    :
+                    "Unknown"
+                }
+                <a href={link} target="_blank" rel="noopener noreferrer"
+                    className="hover:text-pink"
+                >
+                    <p className="mb-3 text-xl font-medium tracking-wide">{title}</p>
+                </a>
+                <div className="flex flex-row lg:flex-col items-center lg:items-start lg:gap-1 xl:gap-0 justify-between">
+                    <div className="flex flex-row items-center gap-4 uppercase text-xs">
+                        <p>{articleDate}</p>
+                        <p>{source}</p>
+                    </div>
+                    <a href={link} target="_blank" rel="noopener noreferrer"
+                        className="bg-lightGrey text-white py-1 px-2 rounded font-semibold lg:mt-3 hover:bg-pink"
+                    >
+                        Read Article
+                    </a>
+                </div>
+            </div>
+        </>
+    )
+}
+
+export default Articles
