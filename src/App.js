@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Articles from "./components/Articles";
 import Feed from "./components/Feed";
 import Search from "./components/Search";
-import ServerError from "./assets/404.svg"
+// import ServerError from "./assets/404.svg"
 
 function App() {
   const [foundArticles, setFoundArticles] = useState([]);
@@ -90,11 +90,11 @@ function App() {
                   functionality above.
                 </p> */}
               </div>
-              <img
+              {/* <img
                 className="w-2/5 max-w-xl lg:max-w-lg"
                 src={ServerError}
                 alt="check4bias server error"
-              />
+              /> */}
             </div>
           ) : (
             <>
