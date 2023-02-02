@@ -21,7 +21,7 @@ function Search({ setFoundArticles }) {
     return (
         <>
             <p className="text-center mt-5 mb-2 text-xl font-medium tracking-wide">Compare newspaper headlines</p>
-            <div className="w-11/12 lg:w-full max-w-lg md:max-w-2xl flex flex-row items-center gap-4 mb-10 mx-auto">
+            <div className="w-11/12 lg:w-full max-w-lg md:max-w-2xl flex flex-row items-center gap-4 mx-auto">
                 <input
                     className="w-full border border-lightGrey rounded-lg py-4 px-3 text-xl text-GreyGoose"
                     id="search"

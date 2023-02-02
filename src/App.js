@@ -104,8 +104,9 @@ function App() {
           <h2 className="text-2xl text-center mt-2 mb-4 py-2 px-6 md:mt-4 md:mb-2 shadow shadow-lightGrey rounded-lg">UK Newspapers</h2>
         </header>
 
-        <div className="w-full md:max-w-2xl mt-2 mb-1 mx-auto">
+        <div className="w-full md:max-w-2xl mt-2 mb-10 mx-auto">
           <Search setFoundArticles={setFoundArticles} />
+          <p className="w-4/5 mt-4 py-1.5 px-3 text-center mx-auto font-semibold tracking-wide bg-red text-white rounded-lg">Note: We are currently using a free tier server provider, which is why it may take a while to load. Like an old car, refresh the page a handful of time should kickstart the server 😉.</p>
         </div>
 
         {foundArticles.length > 0 ? (
