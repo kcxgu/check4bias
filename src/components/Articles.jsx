@@ -25,7 +25,9 @@ const Articles = ({ source, title, link, date }) => {
                                 AFINN-en-165
                             </a>
                         </span>
-                        <p className="text-right py-1 my-0.5 cursor-help text-indigo font-medium tracking-wide">Sentiment Score: {sentimentScore.score}</p>
+                        <p className="text-right py-1 my-0.5 cursor-help text-indigo font-medium tracking-wide">Sentiment Score: {sentimentScore.score}
+                            <span className="ml-1 bg-lightGrey text-white rounded-full px-1 text-sm align-super text-GreyGoose">?</span>
+                        </p>
                     </div>
                     :
                     "Unknown"
