@@ -4,6 +4,7 @@ import Articles from "./components/Articles";
 import Feed from "./components/Feed";
 import Footer from "./components/Footer";
 import Search from "./components/Search";
+import SortByNewspaper from "./components/SortByNewspaper";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,7 +23,8 @@ function App() {
   const [theSun, setTheSun] = useState([]);
   const [metro, setMetro] = useState([]);
   const [serverError, setServerError] = useState(false);
-  const [sortDate, setSortDate] = useState(false);
+  const [sortByDate, setSortByDate] = useState(false);
+  const [sortByNewspaper, setSortByNewspaper] = useState(false);
 
   const getNews = useCallback(async () => {
     try {
@@ -42,11 +44,11 @@ function App() {
     } catch (error) {
       setServerError(true);
     }
-  }, [BBCNews, GuardianNews, theTelegraph, theFT, theEconomist, theIndependent, dailyMail, dailyStar, dailyExpress, dailyMirror, theSun, metro])
+  }, [])
 
   useEffect(() => {
     getNews();
-  }, [BBCNews, GuardianNews, theTelegraph, theFT, theEconomist, theIndependent, dailyMail, dailyStar, dailyExpress, dailyMirror, theSun, metro])
+  }, [getNews])
 
   GuardianNews.sort((a, b) => {
     return new Date(b.item.pubDate) - new Date(a.item.pubDate);
@@ -106,24 +108,43 @@ function App() {
         setErrorMsg("No articles found")
       }
       setErrorMsg("")
-      setSortDate(false)
+      setSortByDate(false)
+      setSortByNewspaper(false)
     }
   }, [searchTerm])
 
-  const sortByDate = () => {
-    setSortDate(true)
+  const handleSortByDate = () => {
+    setSortByDate(true)
+    setSortByNewspaper(false)
   }
 
   useEffect(() => {
     foundArticles.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);
     })
-    setSortDate(false)
-  }, [sortDate])
+    setSortByDate(false)
+    setSortByNewspaper(false)
+  }, [sortByDate, foundArticles])
+
+  const handleSortByNewspaper = () => {
+    setSortByDate(false);
+    setSortByNewspaper(true)
+  }
+
+  let groupedArticles = [];
+  if (foundArticles) {
+    groupedArticles = foundArticles.reduce((group, { source, title, link, date }) => {
+      if (!group[source]) group[source] = [];
+      group[source].push({ title, link, date });
+      return group
+    }, []);
+  }
+  const objectArray = Object.entries(groupedArticles)
 
   return (
     <>
       <div className="flex flex-col">
+        {/* HEADER */}
         <header className="flex flex-col items-center md:mb-5">
           <a href="/">
             <h1 className="text-5xl sm:text-6xl text-center mt-8 md:mt-12 mb-2 py-4 px-8 rounded-lg  shadow-lightGrey shadow-inner">check4bias</h1>
@@ -131,11 +152,13 @@ function App() {
           <h2 className="text-xl sm:text-2xl text-center mt-2 mb-4 py-2 px-6 md:mt-4 md:mb-2 shadow shadow-lightGrey rounded-lg">UK Newspapers</h2>
         </header>
 
+        {/* SEARCH */}
         <div className="w-full md:max-w-2xl mt-2 mb-10 mx-auto">
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} errorMsg={errorMsg} handleSearch={handleSearch} />
           <p className="w-4/5 mt-4 py-1.5 px-3 text-center mx-auto font-semibold tracking-wide bg-red text-white rounded-lg">Note: We are currently using a free tier server provider, which is why it may take a while to load. Like an old car, refresh the page a handful of time should kickstart the server 😉.</p>
         </div>
 
+        {/* SORT FILTERS */}
         {foundArticles.length > 0 ? (
           <>
             <div className="mx-auto">
@@ -149,28 +172,41 @@ function App() {
                 </button>
                 <button
                   className="mb-4 border rounded-lg py-1.5 px-3 font-medium hover:bg-lightGrey hover:text-white ease-linear transition-all duration-100"
-                  onClick={sortByDate}
+                  onClick={handleSortByDate}
                 >
                   Date
                 </button>
-                {/* <button className="mb-4 border rounded-lg py-1 px-2 font-medium hover:bg-lightGrey hover:text-white ease-linear transition-all duration-100">Sort by newspaper</button> */}
-                {/* <button
+                <button
                   className="mb-4 border rounded-lg py-1.5 px-3 font-medium hover:bg-lightGrey hover:text-white ease-linear transition-all duration-100"
-                  onClick={sortBySentiment}
+                  onClick={handleSortByNewspaper}
                 >
-                  Sentiment Score
-                </button> */}
+                  Newspaper
+                </button>
               </div>
 
-              <div className="max-w-lg flex flex-col gap-4 mx-auto md:max-w-2xl lg:max-w-7xl lg:grid lg:grid-cols-3 lg:gap-10 lg:px-10 lg:w-full pb-10">
-                {foundArticles.map((item, i) =>
-                  <Articles
-                    key={i}
-                    source={item.source}
-                    title={item.title}
-                    link={item.link}
-                    date={item.date}
-                  />
+              <div className="max-w-lg md:max-w-xl lg:max-w-7xl flex flex-col gap-4 px-2 mx-auto md:grid lg:grid lg:grid-cols-3 lg:gap-10 lg:px-10 lg:w-full pb-10">
+                {!sortByNewspaper ? (
+                  <>
+                    {foundArticles.map((item, i) =>
+                      <Articles
+                        key={i}
+                        source={item.source}
+                        title={item.title}
+                        link={item.link}
+                        date={item.date}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {objectArray.map((item, i) =>
+                      <SortByNewspaper
+                        key={i}
+                        source={item[0]}
+                        data={item[1]}
+                      />
+                    )}
+                  </>
                 )}
               </div>
             </div>

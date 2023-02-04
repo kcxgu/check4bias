@@ -11,15 +11,15 @@ const Articles = ({ source, title, link, date }) => {
 
     useEffect(() => {
         setSentimentScore(sentiment.analyze(title));
-    }, [title]);
+    }, [title, sentiment]);
 
     return (
         <>
-            <div className="border border-lightGrey rounded-lg py-5 px-4 bg-white shadow-lg">
+            <div className="w-full border border-lightGrey rounded-lg py-4 sm:py-5 px-5 md:px-4 lg:px-5 bg-white shadow-lg">
                 {sentimentScore !== null ?
                     <div className="group relative flex flex-col items-end">
                         <span className="absolute max-w-xs md:max-w-sm lg:max-w-lg bg-GreyGoose text-white text-justify -top-40 -right-3 md:-top-36 md:-right-10 lg:-top-40 lg:-right-14 xl:-top-36 scale-0 rounded-lg py-3 px-4 group-hover:scale-100">How emotive is the headline, based on words rated for goodness/badness on a scale of -5 (extremely negative) to 5 (extremely positive) via 0 (neutral) -
-                            <a href="http://www2.imm.dtu.dk/pubdb/pubs/6010-full.html" target="_blank" rel="noopener noreferrer" className="underline px-1"
+                            <a href="http://www2.imm.dtu.dk/pubdb/pubs/6010-full.html" target="_blank" rel="noopener noreferrer" className="underline pl-1 pr-2.5"
                             >
                                 AFINN-en-165.
                             </a>
@@ -43,7 +43,7 @@ const Articles = ({ source, title, link, date }) => {
                         <p>{source}</p>
                     </div>
                     <a href={link} target="_blank" rel="noopener noreferrer"
-                        className="bg-lightGrey text-white py-1 px-2 rounded font-semibold lg:mt-3 hover:bg-pink"
+                        className="bg-lightGrey text-white py-1 px-2 rounded font-semibold lg:mt-4 hover:bg-pink"
                     >
                         Read Article
                     </a>
