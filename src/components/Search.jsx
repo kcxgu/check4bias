@@ -1,29 +1,11 @@
-import axios from "axios";
-import { useState } from "react";
-
-function Search({ setFoundArticles }) {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [errorMsg, setErrorMsg] = useState("");
-
-    const handleSearch = async (e) => {
-        if (searchTerm) {
-            try {
-                const res = await axios.get(`${process.env.REACT_APP_SEARCH_RENDER}/${searchTerm}`)
-                setFoundArticles(res.data.data)
-            } catch (err) {
-                console.log(err);
-                setErrorMsg("No articles found")
-            }
-            setErrorMsg("")
-        }
-    }
+function Search({ searchTerm, setSearchTerm, errorMsg, handleSearch }) {
 
     return (
         <>
             <p className="text-center mt-5 mb-2 text-xl font-medium tracking-wide">Compare newspaper headlines</p>
-            <div className="w-11/12 lg:w-full max-w-lg md:max-w-2xl flex flex-row items-center gap-4 mx-auto">
+            <div className="w-11/12 lg:w-full max-w-lg md:max-w-2xl flex flex-row items-center gap-2 sm:gap-4 mx-auto">
                 <input
-                    className="w-full border border-lightGrey rounded-lg py-4 px-3 text-xl text-GreyGoose"
+                    className="w-full border border-lightGrey rounded-lg py-2.5 px-2 sm:py-4 sm:px-3 sm:text-xl text-GreyGoose"
                     id="search"
                     type="text"
                     placeholder="Search any topic to compare"
@@ -32,7 +14,7 @@ function Search({ setFoundArticles }) {
                     value={searchTerm}
                 />
                 <button
-                    className="bg-black text-white rounded-lg py-4 px-5 text-xl font-semibold tracking-wide hover:opacity-80"
+                    className="bg-black text-white rounded-lg py-2.5 px-2 sm:py-4 sm:px-3 sm:text-xl font-semibold tracking-wide hover:opacity-80  ease-linear transition-all duration-150"
                     onClick={handleSearch}
                 >
                     Search

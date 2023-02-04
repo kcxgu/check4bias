@@ -1,11 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Articles from "./components/Articles";
 import Feed from "./components/Feed";
 import Footer from "./components/Footer";
 import Search from "./components/Search";
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [foundArticles, setFoundArticles] = useState([]);
   const [BBCNews, setBBCNews] = useState([]);
   const [GuardianNews, setGuardianNews] = useState([]);
@@ -20,11 +22,11 @@ function App() {
   const [theSun, setTheSun] = useState([]);
   const [metro, setMetro] = useState([]);
   const [serverError, setServerError] = useState(false);
+  const [sortDate, setSortDate] = useState(false);
 
-  const getNews = async () => {
+  const getNews = useCallback(async () => {
     try {
       const res = await axios.get(process.env.REACT_APP_RSS_RENDER);
-
       setBBCNews(res.data.BBCNews);
       setGuardianNews(res.data.theGuardian);
       setTheTelegraph(res.data.theTelegraph);
@@ -40,11 +42,11 @@ function App() {
     } catch (error) {
       setServerError(true);
     }
-  }
+  }, [BBCNews, GuardianNews, theTelegraph, theFT, theEconomist, theIndependent, dailyMail, dailyStar, dailyExpress, dailyMirror, theSun, metro])
 
   useEffect(() => {
     getNews();
-  }, [])
+  }, [BBCNews, GuardianNews, theTelegraph, theFT, theEconomist, theIndependent, dailyMail, dailyStar, dailyExpress, dailyMirror, theSun, metro])
 
   GuardianNews.sort((a, b) => {
     return new Date(b.item.pubDate) - new Date(a.item.pubDate);
@@ -94,33 +96,85 @@ function App() {
     return new Date(b.item.pubDate) - new Date(a.item.pubDate);
   })
 
+  const handleSearch = useCallback(async (e) => {
+    if (searchTerm) {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_SEARCH_RENDER}/${searchTerm}`)
+        setFoundArticles(res.data.data)
+      } catch (err) {
+        console.log(err);
+        setErrorMsg("No articles found")
+      }
+      setErrorMsg("")
+      setSortDate(false)
+    }
+  }, [searchTerm])
+
+  const sortByDate = () => {
+    setSortDate(true)
+  }
+
+  useEffect(() => {
+    foundArticles.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    })
+    setSortDate(false)
+  }, [sortDate])
+
   return (
     <>
       <div className="flex flex-col">
         <header className="flex flex-col items-center md:mb-5">
           <a href="/">
-            <h1 className="text-6xl text-center mt-8 md:mt-12 mb-2 py-4 px-8 rounded-lg  shadow-lightGrey shadow-inner">check4bias</h1>
+            <h1 className="text-5xl sm:text-6xl text-center mt-8 md:mt-12 mb-2 py-4 px-8 rounded-lg  shadow-lightGrey shadow-inner">check4bias</h1>
           </a>
-          <h2 className="text-2xl text-center mt-2 mb-4 py-2 px-6 md:mt-4 md:mb-2 shadow shadow-lightGrey rounded-lg">UK Newspapers</h2>
+          <h2 className="text-xl sm:text-2xl text-center mt-2 mb-4 py-2 px-6 md:mt-4 md:mb-2 shadow shadow-lightGrey rounded-lg">UK Newspapers</h2>
         </header>
 
         <div className="w-full md:max-w-2xl mt-2 mb-10 mx-auto">
-          <Search setFoundArticles={setFoundArticles} />
+          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} errorMsg={errorMsg} handleSearch={handleSearch} />
           <p className="w-4/5 mt-4 py-1.5 px-3 text-center mx-auto font-semibold tracking-wide bg-red text-white rounded-lg">Note: We are currently using a free tier server provider, which is why it may take a while to load. Like an old car, refresh the page a handful of time should kickstart the server 😉.</p>
         </div>
 
         {foundArticles.length > 0 ? (
-          <div className="max-w-lg flex flex-col gap-4 mx-auto md:max-w-2xl lg:max-w-7xl lg:grid lg:grid-cols-3 lg:gap-10 lg:px-10 lg:w-full pb-10">
-            {foundArticles.map((item, i) =>
-              <Articles
-                key={i}
-                source={item.source}
-                title={item.title}
-                link={item.link}
-                date={item.date}
-              />
-            )}
-          </div>
+          <>
+            <div className="mx-auto">
+              <div className="flex flex-row justify-end items-baseline gap-2 lg:px-10">
+                <p className="pr-2 text-lg text-GreyGoose font-medium">Sort By:</p>
+                <button
+                  className="mb-4 border rounded-lg py-1.5 px-3 font-medium hover:bg-lightGrey hover:text-white ease-linear transition-all duration-100"
+                  onClick={handleSearch}
+                >
+                  Best Match
+                </button>
+                <button
+                  className="mb-4 border rounded-lg py-1.5 px-3 font-medium hover:bg-lightGrey hover:text-white ease-linear transition-all duration-100"
+                  onClick={sortByDate}
+                >
+                  Date
+                </button>
+                {/* <button className="mb-4 border rounded-lg py-1 px-2 font-medium hover:bg-lightGrey hover:text-white ease-linear transition-all duration-100">Sort by newspaper</button> */}
+                {/* <button
+                  className="mb-4 border rounded-lg py-1.5 px-3 font-medium hover:bg-lightGrey hover:text-white ease-linear transition-all duration-100"
+                  onClick={sortBySentiment}
+                >
+                  Sentiment Score
+                </button> */}
+              </div>
+
+              <div className="max-w-lg flex flex-col gap-4 mx-auto md:max-w-2xl lg:max-w-7xl lg:grid lg:grid-cols-3 lg:gap-10 lg:px-10 lg:w-full pb-10">
+                {foundArticles.map((item, i) =>
+                  <Articles
+                    key={i}
+                    source={item.source}
+                    title={item.title}
+                    link={item.link}
+                    date={item.date}
+                  />
+                )}
+              </div>
+            </div>
+          </>
         ) : (
           <>
             {!serverError ? (
