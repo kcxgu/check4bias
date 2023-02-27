@@ -7,25 +7,24 @@ const Articles = ({ source, title, link, date }) => {
     let formatted = { day: "numeric", month: "long", year: "numeric" }
     let articleDate = new Date(date).toLocaleDateString("en-GB", formatted)
 
-    const sentiment = new Sentiment();
-
     useEffect(() => {
+        const sentiment = new Sentiment();
         setSentimentScore(sentiment.analyze(title));
-    }, [title, sentiment]);
+    }, [title]);
 
     return (
         <>
             <div className="w-full border border-lightGrey rounded-lg py-4 sm:py-5 px-5 md:px-4 lg:px-5 bg-white shadow-lg">
                 {sentimentScore !== null ?
                     <div className="group relative flex flex-col items-end">
-                        <span className="absolute max-w-xs md:max-w-sm lg:max-w-lg bg-GreyGoose text-white text-justify -top-40 -right-3 md:-top-36 md:-right-10 lg:-top-40 lg:-right-14 xl:-top-36 scale-0 rounded-lg py-3 px-4 group-hover:scale-100">How emotive is the headline, based on words rated for goodness/badness on a scale of -5 (extremely negative) to 5 (extremely positive) via 0 (neutral) -
+                        <span className="absolute max-w-xs md:max-w-sm lg:max-w-lg bg-GreyGoose text-white text-justify -top-40 -right-3 md:-top-36 md:-right-10 lg:-top-40 lg:-right-14 xl:-top-36 scale-0 rounded-lg py-3 px-4 group-hover:scale-100">How emotive the headline is, based on words rated for goodness/badness on a scale of -5 (extremely negative) to 5 (extremely positive) via 0 (neutral) -
                             <a href="http://www2.imm.dtu.dk/pubdb/pubs/6010-full.html" target="_blank" rel="noopener noreferrer" className="underline pl-1 pr-2.5"
                             >
                                 AFINN-en-165.
                             </a>
                             Indicative purposes only.
                         </span>
-                        <p className="text-right py-1 my-0.5 cursor-help text-indigo font-medium tracking-wide">Sentiment Score: {sentimentScore.score}
+                        <p className="text-right py-1 my-0.5 cursor-help text-indigo font-medium tracking-wide">Sensationalist Score: {sentimentScore.score}
                             <span className="ml-1 bg-lightGrey rounded-full px-1 text-sm align-super text-GreyGoose">?</span>
                         </p>
                     </div>

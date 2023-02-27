@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Sentiment from "sentiment";
 
 const SortByNewspaper = ({ source, data }) => {
     const [sentimentScore, setSentimentScore] = useState(null);
-    let accScore = [];
+    let accScore = useMemo(() => [], []);
 
     const getSentimentScore = (title) => {
         accScore.push(sentiment.analyze(title).score)
@@ -12,7 +12,7 @@ const SortByNewspaper = ({ source, data }) => {
 
     useEffect(() => {
         setSentimentScore(accScore.reduce((partialSum, a) => partialSum + a, 0))
-    }, [])
+    }, [accScore])
 
     const sentiment = new Sentiment();
 
@@ -27,7 +27,7 @@ const SortByNewspaper = ({ source, data }) => {
                         </a>
                         Indicative purposes only.
                     </span>
-                    <p className="text-right pt-1.5 pb-2 my-0.5 cursor-help text-indigo font-medium tracking-wide">Total Sentiment Score: {sentimentScore}
+                    <p className="text-right pt-1.5 pb-2 my-0.5 cursor-help text-indigo font-medium tracking-wide">Total Sensationalist Score: {sentimentScore}
                         <span className="ml-1 bg-lightGrey rounded-full px-1 text-sm align-super text-GreyGoose">?</span>
                     </p>
                 </div>
