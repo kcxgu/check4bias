@@ -227,8 +227,14 @@ function App() {
             {!serverError ? (
               <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col items-center justify-center gap-4 pb-10 lg:grid lg:grid-cols-2 lg:justify-items-center lg:px-10 xl:gap-28">
-                  {frontPageHeadlines.map((item, i) =>
-                    <img src={item} alt="check4bias newspaper frontpage headlines" className="max-w-lg my-2" />
+                  {frontPageHeadlines.length > 8 ? (
+                    <>
+                      {frontPageHeadlines.map((item, i) =>
+                        <img src={item} alt="check4bias newspaper frontpage headlines" className="max-w-lg my-2" />
+                      )}
+                    </>
+                  ) : (
+                    <p className="uppercase text-GreyGoose text-center font-semibold tracking-wide">Loading...</p>
                   )}
                 </div>
               </div>
