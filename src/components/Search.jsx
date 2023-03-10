@@ -2,8 +2,8 @@ function Search({ searchTerm, setSearchTerm, errorMsg, handleSearch }) {
 
     return (
         <>
-            <p className="text-center mt-5 mb-2 text-xl font-medium tracking-wide">Compare newspaper headlines</p>
-            <div className="w-11/12 lg:w-full max-w-lg md:max-w-2xl flex flex-row items-center gap-2 sm:gap-4 mx-auto">
+            <p className="text-center mt-5 mb-2 text-xl lg:text-2xl font-medium tracking-wide">Compare newspaper headlines</p>
+            <div className="w-11/12 lg:w-full max-w-lg md:max-w-2xl lg:max-w-3xl flex flex-row items-center gap-2 sm:gap-4 mx-auto lg:py-2">
                 <input
                     className="w-full border border-lightGrey rounded-lg py-2.5 px-2 sm:py-4 sm:px-3 sm:text-xl text-GreyGoose"
                     id="search"

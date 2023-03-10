@@ -5,6 +5,7 @@ import Articles from "./components/Articles";
 import Footer from "./components/Footer";
 import Search from "./components/Search";
 import SortByNewspaper from "./components/SortByNewspaper";
+import Tabs from "./components/Tabs";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -157,16 +158,21 @@ function App() {
       <div className="flex flex-col">
         {/* HEADER */}
         <header className="flex flex-col items-center md:mb-5">
-          <a href="/">
-            <h1 className="text-5xl sm:text-6xl text-center mt-8 md:mt-12 mb-2 py-4 px-8 rounded-lg  shadow-lightGrey shadow-inner">check4bias</h1>
-          </a>
-          <h2 className="text-xl sm:text-2xl text-center mt-2 mb-4 py-2 px-6 md:mt-4 md:mb-2 shadow shadow-lightGrey rounded-lg">UK Newspapers</h2>
+          <div className="mt-8 md:mt-12 mb-2 rounded-lg shadow-lightGrey shadow-inner py-4">
+            <a href="/">
+              <h1 className="text-5xl sm:text-6xl text-center px-8">check4bias
+                <br />
+              </h1>
+              <p className="w-fit mx-auto mt-4 mb-1 py-1.5 px-3 text-center uppercase text-xs align-top font-semibold tracking-wide bg-red text-white rounded-lg">Testing Version</p>
+            </a>
+          </div>
+          <h2 className="text-xl sm:text-2xl text-center mt-2 mb-4 py-2 px-6 md:mt-4 md:mb-2 shadow shadow-lightGrey rounded-lg">UK Newspapers
+          </h2>
         </header>
 
         {/* SEARCH */}
-        <div className="w-full md:max-w-2xl mt-2 mb-10 mx-auto">
+        <div className="w-full md:max-w-3xl mt-2 mb-10 mx-auto">
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} errorMsg={errorMsg} handleSearch={handleSearch} />
-          <p className="w-4/5 mt-4 py-1.5 px-3 text-center mx-auto font-semibold tracking-wide bg-red text-white rounded-lg">Note: We are currently using a free tier server provider, which is why it may take a while to load. Like an old car, refresh the page a handful of time should kickstart the server 😉.</p>
         </div>
 
         {/* SORT FILTERS */}
@@ -226,7 +232,8 @@ function App() {
           <>
             {!serverError ? (
               <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col items-center justify-center gap-4 pb-10 lg:grid lg:grid-cols-2 lg:justify-items-center lg:px-10 xl:gap-28">
+                <Tabs frontPageHeadlines={frontPageHeadlines} />
+                {/* <div className="flex flex-col items-center justify-center gap-4 pb-10 lg:grid lg:grid-cols-2 lg:justify-items-center lg:px-10 xl:gap-28">
                   {frontPageHeadlines.length > 8 ? (
                     <>
                       {frontPageHeadlines.map((item, i) =>
@@ -236,7 +243,7 @@ function App() {
                   ) : (
                     <p className="uppercase text-GreyGoose text-center font-semibold tracking-wide">Loading...</p>
                   )}
-                </div>
+                </div> */}
               </div>
               // <>
               //   <h3 className="text-3xl text-center font-medium mb-4 py-2 px-6 md:mt-4 md:mb-6">Today's News:</h3>
